@@ -17,6 +17,7 @@ package com.messapix.ftatr.jfxmobile.maven.plugin.desktop.model;
 
 import com.messapix.ftatr.jfxmobile.maven.plugin.annotations.AsProperty;
 import com.messapix.ftatr.jfxmobile.maven.plugin.annotations.Default;
+import com.messapix.ftatr.jfxmobile.maven.plugin.annotations.Descriptor;
 import java.util.List;
 import org.apache.maven.model.Dependency;
 
@@ -27,8 +28,14 @@ import org.apache.maven.model.Dependency;
 public class DesktopData {
     @AsProperty
     @Default( "false" )
+    @Descriptor(
+             desc = "If true maven will resolve properties in every file from src/desktop/resources folder"
+    )
     private Boolean resourceFiltering;
 
+    @Descriptor(
+             desc = "Allow user to define desktop specific dependencies"
+    )
     private List<Dependency> dependencies;
 
     public Boolean getResourceFiltering() {

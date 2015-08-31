@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Path;
 import java.util.Map;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.component.annotations.Component;
@@ -38,15 +39,19 @@ public class TemplateUtils {
     private FileSystem fs;
 
     public void process( String templateName, Target target, Map<String, ?> map ) throws MojoExecutionException {
+        process( templateName, fs.path( target ), map );
+    }
+
+    public static void process( String templateName, Path targetPath, Map<String, ?> map ) throws MojoExecutionException {
         try {
             Configuration cfg = new Configuration( Configuration.VERSION_2_3_22 );
-            cfg.setClassForTemplateLoading( getClass(), "/" );
+            cfg.setClassForTemplateLoading( TemplateUtils.class, "/" );
             cfg.setDefaultEncoding( "UTF-8" );
             cfg.setTemplateExceptionHandler( TemplateExceptionHandler.RETHROW_HANDLER );
 
             Template template = cfg.getTemplate( templateName );
-            fs.path( target).getParent().toFile().mkdirs();
-            Writer out = new OutputStreamWriter( new FileOutputStream( fs.file( target ) ) );
+            targetPath.getParent().toFile().mkdirs();
+            Writer out = new OutputStreamWriter( new FileOutputStream( targetPath.toFile() ) );
             template.process( map, out );
         }
         catch ( IOException | TemplateException ex ) {

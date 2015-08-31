@@ -16,6 +16,7 @@
 package com.messapix.ftatr.jfxmobile.maven.plugin.ios.model;
 
 import com.messapix.ftatr.jfxmobile.maven.plugin.annotations.AsProperty;
+import com.messapix.ftatr.jfxmobile.maven.plugin.annotations.Descriptor;
 
 /**
  *
@@ -23,12 +24,23 @@ import com.messapix.ftatr.jfxmobile.maven.plugin.annotations.AsProperty;
  */
 public class Simulator {
     @AsProperty
+    @Descriptor(
+             desc = "The name of the device to use in the iOS simulator. For instance iPhone4 or iPhone-5s"
+    )
     private String deviceName;
 
     @AsProperty
+    @Descriptor(
+             desc = "The architecture of the target simulator. Allowed values ar x86 or x86_64",
+             defaultValue = "The architecture of the local machine"
+    )
     private String arch;
 
     @AsProperty
+    @Descriptor(
+             desc = "The iOS sdk version to use in the iOS simulator",
+             defaultValue = "The highest version of installed sdks"
+    )
     private String sdk;
 
     public String getDeviceName() {

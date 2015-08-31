@@ -15,6 +15,8 @@
  */
 package com.messapix.ftatr.jfxmobile.maven.plugin;
 
+import com.messapix.ftatr.jfxmobile.maven.plugin.annotations.AsProperty;
+import com.messapix.ftatr.jfxmobile.maven.plugin.annotations.Descriptor;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.annotations.Component;
@@ -29,10 +31,23 @@ import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluatio
 public class MobileConf {
     private static final String DEFAULT_JAVAFXPORTS_VERSION = "8u60-b2";
 
+    @AsProperty
+    @Descriptor(
+             desc = "The version of javafxPorts to use",
+             defaultValue = DEFAULT_JAVAFXPORTS_VERSION
+    )
     private String javafxportsVersion;
 
+    @AsProperty
+    @Descriptor(
+             desc = "The fully qualified name of the main class"
+    )
     private String mainClass;
 
+    @AsProperty
+    @Descriptor(
+             desc = "The fully qualified name of the class used as preloader"
+    )
     private String preloaderClass;
 
     @Requirement
