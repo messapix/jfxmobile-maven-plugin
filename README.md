@@ -2,6 +2,63 @@
 # jfxmobile-maven-plugin
 Maven version of jfxmobile plugin
 
+Waiting for a better documentation take a look at the [JavafxPorts](http://docs.gluonhq.com/javafxports) project documentation.
+
+### Gettin started
+The following is an example of configuration:
+
+```
+...
+<plugin>
+  <groupId>com.messapix.ftatr.jfxmobile</groupId>
+  <artifactId>jfxmobile-maven-plugin</artifactId>
+  <version>1.0.0-b1</version>
+  <extensions>true</extensions>
+  <configuration>
+      <mainClass>test.something.App</mainClass>
+      <android>
+          <manifest>lib/android/AndroidManifest.xml</manifest>
+          <dependencies>
+              <dependency>
+                  <groupId>com.gluonhq</groupId>
+                  <artifactId>charm-down-android</artifactId>
+                  <version>0.0.3-SNAPSHOT</version>
+                  <scope>runtime</scope>
+              </dependency>
+          </dependencies>
+      </android>
+      
+      <desktop>
+          <dependencies>
+              <dependency>
+                  <groupId>com.gluonhq</groupId>
+                  <artifactId>charm-down-desktop</artifactId>
+                  <version>0.0.3-SNAPSHOT</version>
+                  <scope>runtime</scope>
+              </dependency>
+          </dependencies>
+      </desktop>
+      
+      <ios>
+          <dependencies>
+              <dependency>
+                  <groupId>com.gluonhq</groupId>
+                  <artifactId>charm-down-ios</artifactId>
+                  <version>0.0.3-SNAPSHOT</version>
+                  <scope>runtime</scope>
+              </dependency>
+          </dependencies>
+      </ios>
+  </configuration>
+</plugin>
+...
+```
+
+Note that you must set ```<extensions>true</extensions>``` in order to work with the plugin.
+
+To compile android apk run:
+```mvn clean package android```
+
 ### General
 
 | parameter | description | property | default |
