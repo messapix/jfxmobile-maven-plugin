@@ -50,9 +50,9 @@ public class FileSystem {
     }
 
     /**
-     * The target targetDir dir.
+     * The ${project.build.directory} path.
      *
-     * @return
+     * @return path
      */
     public Path targetDir() {
         try {
@@ -67,7 +67,7 @@ public class FileSystem {
     /**
      * The absolute path of javafxports target folder
      *
-     * @return
+     * @return path
      */
     public Path javafxports() {
         return targetDir().resolve( "javafxports" );
@@ -76,8 +76,8 @@ public class FileSystem {
     /**
      * Return the path of the target
      *
-     * @param target
-     * @return
+     * @param target Target enum
+     * @return path
      */
     public Path path( Target target ) {
         String relativePath = target.getRelativePath().replaceAll( "\\$\\{name\\}", mobileConf.getBuildFileName() );
@@ -87,8 +87,8 @@ public class FileSystem {
     /**
      * Return the File object of the target
      *
-     * @param target
-     * @return
+     * @param target Target enum
+     * @return file
      */
     public File file( Target target ) {
         return path( target ).toFile();
@@ -97,8 +97,8 @@ public class FileSystem {
     /**
      * Return the target's path as a string
      *
-     * @param target
-     * @return
+     * @param target Target enum
+     * @return string 
      */
     public String string( Target target ) {
         return path( target ).toString();
