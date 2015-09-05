@@ -47,9 +47,9 @@ public class DeviceMojo extends AbstractAndroidMojo {
             super.init();
         }
 
-        String output = executor.exe( 
-                androidConf.getPlatformTool( "adb" ), 
-                "install", 
+        String output = executor.exe(
+                androidConf.getPlatformTool( "adb" ),
+                "install",
                 fs.string( androidConf.isDebugMode() ? AndroidTarget.DEBUGAPK : AndroidTarget.APK )
         );
 
@@ -57,6 +57,11 @@ public class DeviceMojo extends AbstractAndroidMojo {
         // adb always returns 0 even if errors occour. A temporary solution is to inspect output
         if ( output.contains( "Failure" ) ) {
             getLog().error( output );
+
+            if ( output.contains( "rm failed for -f, No such file or directory" ) ) {
+                getLog().error( "This error may be due to a wrong <mainClass> parameter" );
+            }
+
             throw new MojoExecutionException( "Cannot install apk" );
         }
     }

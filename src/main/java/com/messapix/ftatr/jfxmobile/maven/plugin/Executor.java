@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.Random;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.taskdefs.Java;
 import org.apache.tools.ant.types.Path;
@@ -35,10 +36,6 @@ import org.codehaus.plexus.logging.Logger;
  */
 @Component( role = Executor.class )
 public class Executor {
-    public static final String OUTPUT = "out";
-
-    public static final String ERROR = "err";
-
     @Requirement
     private MavenAnt ant;
 
@@ -57,26 +54,27 @@ public class Executor {
             java.createJvmarg().setValue( jvmArgs );
         }
 
-        if ( java.getProject().getProperty( OUTPUT ) == null ) {
-            java.setOutputproperty( OUTPUT );
-            java.setErrorProperty( ERROR );
-        }
-
         for ( String arg : args ) {
             if ( arg != null && !arg.trim().isEmpty() ) {
                 java.createArg().setValue( arg );
             }
         }
+        
+        String outputProperty = "out" + new Random().nextLong();
+        String errorProperty = "err" + new Random().nextLong();
+
+        java.setOutputproperty( outputProperty );
+        java.setErrorProperty( errorProperty );
 
         int result = java.executeJava();
 
         if ( result != 0 ) {
-            throw new MojoExecutionException( java.getProject().getProperty( ERROR ) );
+            throw new MojoExecutionException( java.getProject().getProperty( errorProperty ) );
         }
         else {
             if ( outputFile != null ) {
                 try {
-                    Files.write( java.getProject().getProperty( OUTPUT ), outputFile, Charset.forName( "UTF-8" ) );
+                    Files.write( java.getProject().getProperty( outputProperty ), outputFile, Charset.forName( "UTF-8" ) );
                 }
                 catch ( IOException ex ) {
                     throw new MojoExecutionException( "Error", ex );
