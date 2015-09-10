@@ -22,6 +22,7 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
+import org.codehaus.plexus.logging.Logger;
 
 /**
  *
@@ -30,69 +31,74 @@ import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluatio
 @Component( role = MobileConf.class )
 public class MobileConf {
     private static final String DEFAULT_JAVAFXPORTS_VERSION = "8u60-b2";
-
+    
     @AsProperty
     @Descriptor(
              desc = "The version of javafxPorts to use",
              defaultValue = DEFAULT_JAVAFXPORTS_VERSION
     )
     private String javafxportsVersion;
-
+    
     @AsProperty
     @Descriptor(
              desc = "The fully qualified name of the main class"
     )
     private String mainClass;
-
+    
     @AsProperty
     @Descriptor(
              desc = "The fully qualified name of the class used as preloader"
     )
     private String preloaderClass;
-
+    
     @Requirement
     private MobileExpressionEvaluator evaluator;
-
+    
     @Requirement
     private MavenProject project;
-
+    
     @Requirement
     private FileSystem fs;
-
+    
+    @Requirement
+    private Logger log;
+    
     public void configure( String javafxportsVersion, String mainClass, String preloaderClass ) throws MojoExecutionException {
         this.javafxportsVersion = javafxportsVersion == null || javafxportsVersion.trim().isEmpty() ? DEFAULT_JAVAFXPORTS_VERSION : javafxportsVersion;
-
+        
+        log.info( "javafxPorts version: " + this.javafxportsVersion );
+        
         if ( mainClass != null ) {
             this.mainClass = mainClass;
         }
         else {
             throw new MojoExecutionException( "No main class configured" );
         }
-
+        
         this.preloaderClass = preloaderClass == null || preloaderClass.trim().isEmpty() ? null : preloaderClass;
 
         // Create base folders
         fs.javafxports().toFile().mkdirs();
-
+        
         for ( Target target : MainTarget.values() ) {
             if ( target.getType() == Target.Type.DIR ) {
                 fs.file( target ).mkdirs();
             }
         }
     }
-
+    
     public String getJavafxportsVersion() {
         return javafxportsVersion;
     }
-
+    
     public String getMainClass() {
         return mainClass;
     }
-
+    
     public String getPreloaderClass() {
         return preloaderClass;
     }
-
+    
     public String getProjectName() {
         try {
             return evaluator.evaluate( "${project.name}" );
@@ -101,7 +107,7 @@ public class MobileConf {
             return null;
         }
     }
-
+    
     public String getProjectVersion() {
         try {
             return evaluator.evaluate( "${project.version}" );
@@ -110,22 +116,22 @@ public class MobileConf {
             return null;
         }
     }
-
+    
     public String getBuildFileName() {
         try {
             String fileName = evaluator.evaluate( "${project.build.fileName}" );
-
+            
             return fileName != null ? fileName : evaluator.evaluate( "${project.artifactId}" );
         }
         catch ( ExpressionEvaluationException ex ) {
             return null;
         }
     }
-
+    
     public boolean isConfigured() {
         return javafxportsVersion != null;
     }
-
+    
     public MavenProject getProject() {
         return project.clone();
     }

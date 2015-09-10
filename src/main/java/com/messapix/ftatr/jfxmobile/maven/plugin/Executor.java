@@ -59,7 +59,7 @@ public class Executor {
                 java.createArg().setValue( arg );
             }
         }
-        
+
         String outputProperty = "out" + new Random().nextLong();
         String errorProperty = "err" + new Random().nextLong();
 
@@ -113,6 +113,29 @@ public class Executor {
         }
     }
 
+    public void exeOnScreen( File executable, String... args ) throws MojoExecutionException {
+        StringBuilder cmdBuilder = new StringBuilder( executable.toString() );
+
+        for ( String arg : args ) {
+            cmdBuilder.append( " " ).append( arg.trim() );
+        }
+
+        try {
+            Process p = Runtime.getRuntime().exec( cmdBuilder.toString() );
+
+            toScreen( p.getInputStream() );
+            String error = fromStream( p.getErrorStream() );
+
+            if ( p.exitValue() != 0 ) {
+                log.error( error );
+                throw new MojoExecutionException( "Cannot execute " + executable.toPath().getFileName() );
+            }
+        }
+        catch ( IOException ex ) {
+            throw new MojoExecutionException( "Error ", ex );
+        }
+    }
+
     private Path buildPath( String file ) {
         Path path = new Path( ant.getAntProject() );
         path.setPath( file );
@@ -129,6 +152,19 @@ public class Executor {
             }
 
             return builder.toString();
+        }
+        catch ( IOException ex ) {
+            throw new MojoExecutionException( "Error during read output" );
+        }
+    }
+
+    private void toScreen( InputStream stream ) throws MojoExecutionException {
+        try {
+            BufferedReader outReader = new BufferedReader( new InputStreamReader( stream ) );
+            String line;
+            while ( ( line = outReader.readLine() ) != null ) {
+                System.out.println( line );
+            }
         }
         catch ( IOException ex ) {
             throw new MojoExecutionException( "Error during read output" );
