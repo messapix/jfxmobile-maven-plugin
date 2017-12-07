@@ -27,7 +27,7 @@ import org.codehaus.plexus.component.annotations.Requirement;
  */
 @Component( role = IosDependencies.class )
 public class IosDependencies {
-    private static final String ROBOVM_VERSION = "1.6.0";
+    private static final String ROBOVM_VERSION = "2.3.3";
 
     @Requirement
     private MobileConf mobileConf;
@@ -44,7 +44,7 @@ public class IosDependencies {
 
     public Dependency robovm() {
         Dependency dependency = new Dependency();
-        dependency.setGroupId( "org.robovm" );
+        dependency.setGroupId( "com.mobidevelop.robovm" );
         dependency.setArtifactId( "robovm-dist" );
         dependency.setVersion( ROBOVM_VERSION );
         dependency.setClassifier( "nocompiler" );
@@ -61,15 +61,15 @@ public class IosDependencies {
     }
 
     public Dependency robovmRt() {
-        return utils.compile( "org.robovm", "robovm-rt", ROBOVM_VERSION );
+        return utils.compile( "com.mobidevelop.robovm", "robovm-rt", ROBOVM_VERSION );
     }
 
     public Dependency cocoatouch() {
-        return utils.compile( "org.robovm", "robovm-cocoatouch", ROBOVM_VERSION );
+        return utils.compile( "com.mobidevelop.robovm", "robovm-cocoatouch", ROBOVM_VERSION );
     }
     
     public Dependency objc() {
-        return utils.compile( "org.robovm", "robovm-objc", ROBOVM_VERSION );
+        return utils.compile( "com.mobidevelop.robovm", "robovm-objc", ROBOVM_VERSION );
     }
 
 }
