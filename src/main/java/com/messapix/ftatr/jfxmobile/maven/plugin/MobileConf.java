@@ -30,7 +30,7 @@ import org.codehaus.plexus.logging.Logger;
  */
 @Component( role = MobileConf.class )
 public class MobileConf {
-    private static final String DEFAULT_JAVAFXPORTS_VERSION = "8u60-b5";
+    private static final String DEFAULT_JAVAFXPORTS_VERSION = "8.60.9";
     
     @AsProperty
     @Descriptor(
