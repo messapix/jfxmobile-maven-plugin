@@ -133,8 +133,8 @@ public class IosData {
     @AsProperty( separator = ":" )
     @Default( "thumbv7" )
     @Descriptor(
-             desc = "A list of architectures to include in the IPA. Either thumbv7 or amd64 or both."
-            + "If used in property archs must be separated by a colon. For example jfxmobile.ios.ipaArchs=thumbv7:amd64"
+             desc = "A list of architectures to include in the IPA. Either thumbv7 or arm64 or both."
+            + "If used in property archs must be separated by a colon. For example jfxmobile.ios.ipaArchs=thumbv7:arm64"
     )
     private List<String> ipaArchs;
 

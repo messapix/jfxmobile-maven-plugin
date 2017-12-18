@@ -63,7 +63,7 @@ To compile android apk run:
 
 | parameter | description | property | default |
 | --------- | ----------- | ------------ | ------- |
-| javafxportsVersion | (String) The version of javafxPorts to use | jfxmobile.javafxportsVersion | 8u60-b2 |
+| javafxportsVersion | (String) The version of javafxPorts to use | jfxmobile.javafxportsVersion | 8.60.9 |
 | mainClass | (String) The fully qualified name of the main class | jfxmobile.mainClass |  |
 | preloaderClass | (String) The fully qualified name of the class used as preloader | jfxmobile.preloaderClass |  |
 
@@ -113,7 +113,7 @@ iOS parameters are wrapped in ```<ios>``` element.
 | provisioningProfile | (String) The name of the provisioning profile to use when building for device | jfxmobile.ios.provisioningProfile |  |
 | debug | (Boolean) A boolean specifying whether the application should be launched in debug mode or not. The application will suspend before the main method is called and will wait for a debugger to connect | jfxmobile.ios.debug |  |
 | debugPort | (Integer) An integer specifying the port to listen for debugger connections on when launching in debug mode | jfxmobile.ios.debugPort | If not set a default port will be used. The port actually used will be written to the console before the app is launched |
-| ipaArchs | (List) A list of architectures to include in the IPA. Either thumbv7 or amd64 or both.If used in property archs must be separated by a colon. For example jfxmobile.ios.ipaArchs=thumbv7:amd64 | jfxmobile.ios.ipaArchs |  |
+| ipaArchs | (List) A list of architectures to include in the IPA. Either thumbv7 or arm64 or both.If used in property archs must be separated by a colon. For example jfxmobile.ios.ipaArchs=thumbv7:arm64 | jfxmobile.ios.ipaArchs |  |
 | simulator | (Simulator) This element contains simulator settings. See table below |  |  |
 
 ### iOS Simulator

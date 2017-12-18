@@ -113,8 +113,9 @@ public class IosConf {
                 configureSimulatorDevice( iosData.getSimulator().getDeviceName() );
                 break;
             case DEVICE:
-                configureDeviceArch( null );
-                configureTargetSDK( null, false );
+                configureDeviceArch( iosData.getSimulator().getArch() );
+                configureTargetSDK( iosData.getSimulator().getSdk(), false );
+                configureSimulatorDevice( iosData.getSimulator().getDeviceName() );
                 break;
         }
 
@@ -237,25 +238,31 @@ public class IosConf {
     }
 
     private void configureSimulatorArch( String archParam ) {
-        if ( arch != null ) {
+        if ( archParam != null ) {
             try {
-                arch = Arch.valueOf( archParam );
+                Arch archVal = Arch.valueOf( archParam );
 
-                if ( arch != Arch.x86 && arch != Arch.x86_64 ) {
-                    log.warn( "arch=" + arch + " is not a valid value for simulator. Use x86 or x86_64 instead" );
+                // thumbv7 and arm64 are not valid for simulator. Only x86 or x86_64
+                if ( archVal == Arch.x86 || archVal == Arch.x86_64 ) {
+                    arch = archVal;
+                    return;
+                }
+                else {
+                    log.warn( "arch=" + archParam + " is not a valid value for simulator. Use x86 or x86_64 instead" );
                 }
             }
             catch ( IllegalArgumentException ex ) {
-                log.warn( "arch=" + arch + " is not valid. Valid values are x86 or x86_64" );
+                log.warn( "arch=" + archParam + " is not valid. Valid values are x86 or x86_64" );
             }
         }
         else {
             log.info( "No arch defined" );
         }
+        
+        // try to infer architecture from operating system
+        String osArch = System.getProperty( "os.arch", "arm64" );
 
-        String osArch = System.getProperty( "os.arch", "amd64" );
-
-        if ( "amd64".equals( osArch ) || "x86_64".equals( osArch ) ) {
+        if ( "arm64".equals( osArch ) || "x86_64".equals( osArch ) ) {
             log.info( "arch=x86_64 is used" );
             arch = Arch.x86_64;
         }
@@ -266,16 +273,21 @@ public class IosConf {
     }
 
     private void configureDeviceArch( String archParam ) {
-        if ( arch != null ) {
+        if ( archParam != null ) {
             try {
-                arch = Arch.valueOf( archParam );
+                Arch archVal = Arch.valueOf( archParam );
 
-                if ( arch != Arch.thumbv7 && arch != Arch.arm64 ) {
-                    log.warn( "arch=" + arch + " is not a valid value for simulator. Use thumbv7 or arm64 instead" );
+                // x86 and x86_64 are not valid for devices. Only thumbv7 or arm64
+                if ( archVal == Arch.thumbv7 || archVal == Arch.arm64 ) {
+                    arch = archVal;
+                    return;
+                }
+                else {
+                    log.warn( "arch=" + archParam + " is not a valid value for device. Use thumbv7 or arm64 instead" );
                 }
             }
             catch ( IllegalArgumentException ex ) {
-                log.warn( "arch=" + arch + " is not valid. Valid values are thumbv7 or arm64" );
+                log.warn( "arch=" + archParam + " is not valid. Valid values are thumbv7 or arm64" );
             }
         }
         else {
