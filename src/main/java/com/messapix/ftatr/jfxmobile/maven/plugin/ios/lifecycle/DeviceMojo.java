@@ -25,8 +25,8 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.codehaus.plexus.logging.Logger;
 import org.robovm.compiler.AppCompiler;
 import org.robovm.compiler.config.Config;
-import org.robovm.compiler.target.ios.DeviceType;
 import org.robovm.compiler.target.ios.IOSDeviceLaunchParameters;
+import org.robovm.libimobiledevice.IDevice;
 
 /**
  *
@@ -47,7 +47,19 @@ public class DeviceMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         Config config = robovmBuilder.build();
 
-        DeviceType deviceType = getDeviceType();
+        if ( log.isDebugEnabled() ) {
+            String[] udids = IDevice.listUdids();
+
+            log.debug( "Connected devices: " );
+            if ( udids != null && udids.length != 0 ) {
+                for ( String udid : udids ) {
+                    log.debug( "Device: " + udid );
+                }
+            }
+            else {
+                log.debug( "No device found" );
+            }
+        }
 
         getLog().info( "ios device os " + config.getOs() );
         getLog().info( "ios device arch " + config.getArch() );
@@ -56,11 +68,19 @@ public class DeviceMojo extends AbstractMojo {
         getLog().info( "ios device force link classes " + config.getForceLinkClasses() );
         getLog().info( "ios device info.plist " + iosConf.getInfoPList() );
         getLog().info( "ios device libs " + config.getLibs() );
-        getLog().info( "ios device device type " + deviceType );
 
         AppCompiler compiler = new AppCompiler( config );
 
         IOSDeviceLaunchParameters launchParameters = (IOSDeviceLaunchParameters)config.getTarget().createLaunchParameters();
+
+        if ( iosConf.getDeviceId() != null ) {
+            launchParameters.setDeviceId( iosConf.getDeviceId() );
+            log.info( "ios device udid: " + launchParameters.getDeviceId() );
+        }
+        else {
+            String[] udids = IDevice.listUdids();
+            log.info( "ios device udid: " + ( udids != null ? udids[0] : "no device" ) );
+        }
 
         try {
             compiler.build();
@@ -68,22 +88,6 @@ public class DeviceMojo extends AbstractMojo {
         }
         catch ( Throwable ex ) {
             throw new MojoExecutionException( "Error", ex );
-        }
-    }
-
-    protected DeviceType getDeviceType() {
-        if ( iosConf.getDeviceName() != null ) {
-            return DeviceType.getBestDeviceType(
-                    iosConf.getArch(),
-                    iosConf.getDeviceFamily(),
-                    iosConf.getDeviceName(),
-                    iosConf.getSDK().getVersion()
-            );
-        }
-        else {
-            DeviceType bestDeviceType = DeviceType.getBestDeviceType();
-            log.warn( "No device name is set. " + bestDeviceType.getDeviceName() + " used" );
-            return bestDeviceType;
         }
     }
 }

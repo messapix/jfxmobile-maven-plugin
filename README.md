@@ -114,6 +114,7 @@ iOS parameters are wrapped in ```<ios>``` element.
 | debug | (Boolean) A boolean specifying whether the application should be launched in debug mode or not. The application will suspend before the main method is called and will wait for a debugger to connect | jfxmobile.ios.debug |  |
 | debugPort | (Integer) An integer specifying the port to listen for debugger connections on when launching in debug mode | jfxmobile.ios.debugPort | If not set a default port will be used. The port actually used will be written to the console before the app is launched |
 | ipaArchs | (List) A list of architectures to include in the IPA. Either thumbv7 or arm64 or both.If used in property archs must be separated by a colon. For example jfxmobile.ios.ipaArchs=thumbv7:arm64 | jfxmobile.ios.ipaArchs |  |
+| deviceId | (String) The identifier of the target device | jfxmobile.ios.deviceId |  |
 | simulator | (Simulator) This element contains simulator settings. See table below |  |  |
 
 ### iOS Simulator

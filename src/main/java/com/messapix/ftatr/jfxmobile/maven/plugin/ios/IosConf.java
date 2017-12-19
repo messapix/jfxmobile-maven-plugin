@@ -72,6 +72,8 @@ public class IosConf {
 
     private final List<Artifact> buildingArtifacts = new ArrayList<>();
 
+    private IosData iosData;
+
     @Requirement
     private ArtifactResolver artifactResolver;
 
@@ -92,6 +94,8 @@ public class IosConf {
 
     public void configure( IosData iosData, Target target ) throws MojoExecutionException {
         log.debug( "Configuring build for iOS" );
+
+        this.iosData = iosData;
 
         modelInitializator.process( iosData, "jfxmobile.ios" );
 
@@ -115,7 +119,6 @@ public class IosConf {
             case DEVICE:
                 configureDeviceArch( iosData.getSimulator().getArch() );
                 configureTargetSDK( iosData.getSimulator().getSdk(), false );
-                configureSimulatorDevice( iosData.getSimulator().getDeviceName() );
                 break;
         }
 
@@ -258,7 +261,7 @@ public class IosConf {
         else {
             log.info( "No arch defined" );
         }
-        
+
         // try to infer architecture from operating system
         String osArch = System.getProperty( "os.arch", "arm64" );
 
@@ -352,6 +355,10 @@ public class IosConf {
 
     public DeviceType.DeviceFamily getDeviceFamily() {
         return deviceFamily;
+    }
+    
+    public String getDeviceId() {
+        return iosData.getDeviceId();
     }
 
     private void configureIpaArchs( List<String> ipaArchsParam ) throws MojoExecutionException {

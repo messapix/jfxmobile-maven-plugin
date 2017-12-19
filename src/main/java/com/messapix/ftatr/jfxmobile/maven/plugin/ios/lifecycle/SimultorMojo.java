@@ -17,6 +17,8 @@ package com.messapix.ftatr.jfxmobile.maven.plugin.ios.lifecycle;
 
 import com.messapix.ftatr.jfxmobile.maven.plugin.ios.IosConf;
 import com.messapix.ftatr.jfxmobile.maven.plugin.ios.RobovmBuilder;
+import java.text.MessageFormat;
+import java.util.List;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -46,6 +48,30 @@ public class SimultorMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         Config config = robovmBuilder.build();
+        
+        if ( log.isDebugEnabled() ) {
+            List<DeviceType> deviceTypes = DeviceType.listDeviceTypes();
+
+            log.debug( "List of available device types:" );
+            if ( deviceTypes != null && !deviceTypes.isEmpty() ) {
+                for ( DeviceType deviceType : deviceTypes ) {
+                    String msg = MessageFormat.format(
+                            "Device type: name='{0}', state='{4}', simpleId='{1}', udid='{2}', family='{3}', sdk='{5}', archs={6}",
+                            deviceType.getDeviceName(),
+                            deviceType.getSimpleDeviceTypeId(),
+                            deviceType.getUdid(),
+                            deviceType.getFamily(),
+                            deviceType.getState(),
+                            deviceType.getSdk(),
+                            deviceType.getArchs().toString()
+                    );
+                    log.debug( msg );
+                }
+            }
+            else {
+                log.debug( "No device type found" );
+            }
+        }
         
         DeviceType deviceType = getDeviceType();
         
