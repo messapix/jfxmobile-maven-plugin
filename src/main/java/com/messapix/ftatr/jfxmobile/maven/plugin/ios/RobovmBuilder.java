@@ -38,7 +38,6 @@ import org.robovm.compiler.target.ios.SigningIdentity;
  * @author Alfio Gloria
  */
 @Component( role = RobovmBuilder.class )
-
 public class RobovmBuilder {
     @Requirement
     private FileSystem fs;
@@ -223,18 +222,31 @@ public class RobovmBuilder {
         return this;
     }
 
-    public RobovmBuilder signing( String identity, String provisioningProfile, boolean skip ) {
+    public RobovmBuilder signing( String signingIdentity, String provisioningProfile, boolean skip ) {
         log.debug( "Robovm: signing config" );
 
         if ( log.isDebugEnabled() ) {
-            log.debug( "List of Identities" );
+            log.debug( "List of signing identities" );
 
-            for ( SigningIdentity id : SigningIdentity.list() ) {
-                log.debug( "Signing Identity: " + id.getName() + " -> " + id.getFingerprint() );
+            List<SigningIdentity> identities = SigningIdentity.list();
+            if ( identities == null || identities.isEmpty() ) {
+                log.debug( "No signing identity found" );
+            }
+            else {
+                for ( SigningIdentity identity : identities ) {
+                    log.debug( identity.toString() );
+                }
             }
 
-            if ( SigningIdentity.list().isEmpty() ) {
-                log.debug( "No Identity found" );
+            log.debug( "List of provisioning profiles" );
+            List<ProvisioningProfile> profiles = ProvisioningProfile.list();
+            if ( profiles != null && !profiles.isEmpty() ) {
+                for ( ProvisioningProfile profile : profiles ) {
+                    log.debug( profile.toString() );
+                }
+            }
+            else {
+                log.debug( "No provisioning profile found" );
             }
         }
 
@@ -242,14 +254,20 @@ public class RobovmBuilder {
             builder.iosSkipSigning( true );
         }
         else {
-            if ( identity != null ) {
-                log.debug( "Using explicit iOS Signing identity: " + identity );
-                builder.iosSignIdentity( SigningIdentity.find( SigningIdentity.list(), identity ) );
+            if ( signingIdentity != null ) {
+                log.debug( "Using explicit iOS Signing identity: " + signingIdentity );
+                builder.iosSignIdentity( SigningIdentity.find( SigningIdentity.list(), signingIdentity ) );
+            }
+            else{
+                log.info( "No signing indentity provided");
             }
 
             if ( provisioningProfile != null ) {
                 log.debug( "Using explicit iOS provisioning profile: " + provisioningProfile );
                 builder.iosProvisioningProfile( ProvisioningProfile.find( ProvisioningProfile.list(), provisioningProfile ) );
+            }
+            else{
+                log.info( "No provisioning profile provided");
             }
         }
 
