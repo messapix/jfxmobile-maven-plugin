@@ -2,6 +2,35 @@
 <component-set>
     <components>
         <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>mobile</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <phases>      
+                    <process-resources>org.apache.maven.plugins:maven-resources-plugin:2.7:resources</process-resources>
+                    <compile>com.messapix.ftatr.jfxmobile:jfxmobile-maven-plugin:main-compile</compile>
+                    <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:2.7:testResources</process-test-resources>
+                    <test-compile>org.apache.maven.plugins:maven-compiler-plugin:3.5:testCompile</test-compile>
+                    <test>org.apache.maven.plugins:maven-surefire-plugin:2.19.1:test</test>
+                    <package>org.apache.maven.plugins:maven-jar-plugin:2.6:jar</package>
+                    <install>org.apache.maven.plugins:maven-install-plugin:2.5.2:install</install>
+                    <deploy>org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy</deploy>
+                </phases>
+            </configuration>
+        </component>
+        
+        <component>
+            <role>org.apache.maven.artifact.handler.ArtifactHandler</role>
+            <role-hint>mobile</role-hint>
+            <implementation>org.apache.maven.artifact.handler.DefaultArtifactHandler</implementation>
+            <configuration>
+                <extension>jar</extension>
+                <type>mobile</type>
+                <packaging>mobile</packaging>
+            </configuration>
+        </component>
+        
+        <component>
             <role>org.apache.maven.lifecycle.Lifecycle</role>
             <role-hint>android-lifecycle</role-hint>
             <implementation>org.apache.maven.lifecycle.Lifecycle</implementation>
@@ -150,6 +179,34 @@
                     <ios-device-resources>com.messapix.ftatr.jfxmobile:jfxmobile-maven-plugin:ios-resources</ios-device-resources>
                     <ios-device-infoplist>com.messapix.ftatr.jfxmobile:jfxmobile-maven-plugin:ios-infoplist</ios-device-infoplist>
                     <ios-device>com.messapix.ftatr.jfxmobile:jfxmobile-maven-plugin:ios-device</ios-device>
+                </default-phases>
+            </configuration>
+        </component>
+        
+        <component>
+            <role>org.apache.maven.lifecycle.Lifecycle</role>
+            <role-hint>embedded-lifecycle</role-hint>
+            <implementation>org.apache.maven.lifecycle.Lifecycle</implementation>
+            <configuration>
+                <id>embedded</id>
+                <phases>
+                    <phase>embedded-configure</phase>
+                    <phase>embedded-process-resources</phase>
+                    <phase>embedded-compile</phase>
+                    <phase>embedded-package</phase>
+                    <phase>embedded-dist</phase>
+                    <phase>embedded</phase>
+                    <phase>embedded-deploy</phase>
+                    <phase>embedded-run</phase>
+                </phases>
+                <default-phases>
+                    <embedded-configure>com.messapix.ftatr.jfxmobile:jfxmobile-maven-plugin:embedded-configure</embedded-configure>
+                    <embedded-process-resources>com.messapix.ftatr.jfxmobile:jfxmobile-maven-plugin:embedded-resources</embedded-process-resources>
+                    <embedded-compile>com.messapix.ftatr.jfxmobile:jfxmobile-maven-plugin:embedded-compile</embedded-compile>
+                    <embedded-package>com.messapix.ftatr.jfxmobile:jfxmobile-maven-plugin:embedded-package</embedded-package>
+                    <embedded-dist>com.messapix.ftatr.jfxmobile:jfxmobile-maven-plugin:embedded-dist</embedded-dist>
+                    <embedded-deploy>com.messapix.ftatr.jfxmobile:jfxmobile-maven-plugin:embedded-deploy</embedded-deploy>
+                    <embedded-run>com.messapix.ftatr.jfxmobile:jfxmobile-maven-plugin:embedded-run</embedded-run>
                 </default-phases>
             </configuration>
         </component>

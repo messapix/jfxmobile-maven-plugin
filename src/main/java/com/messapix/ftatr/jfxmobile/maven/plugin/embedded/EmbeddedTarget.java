@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Messapix.
+ * Copyright 2016 Messapix.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.messapix.ftatr.jfxmobile.maven.plugin.desktop;
+package com.messapix.ftatr.jfxmobile.maven.plugin.embedded;
 
 import com.messapix.ftatr.jfxmobile.maven.plugin.Target;
 
@@ -22,27 +22,22 @@ import com.messapix.ftatr.jfxmobile.maven.plugin.Target;
  *
  * @author Alfio Gloria
  */
-public enum DesktopTarget implements Target {
-    // Directories
-    BASEDIR( "desktop", Type.DIR ),
-    TEMPDIR( "desktop/tmp", Type.DIR ),
-    RESOURCESDIR( "desktop/tmp/resources", Type.DIR ),
-    CLASSESDIR( "desktop/tmp/classes", Type.DIR ),
-    APPDIR( "desktop/dist/app", Type.DIR ),
-    APPLIBSDIR( "desktop/dist/app/libs", Type.DIR ),
-    UBERDIR( "desktop/dist/uber", Type.DIR ),
+public enum EmbeddedTarget implements Target {
+    BASEDIR( "embedded", Type.DIR ),
+    TEMPDIR( "embedded/tmp", Type.DIR ),
+    RESOURCESDIR( "embedded/tmp/resources", Type.DIR ),
+    CLASSESDIR( "embedded/tmp/classes", Type.DIR ),
+    DISTDIR( "embedded/dist", Type.DIR ),
     // Files
-    CLASSESJAR( "desktop/tmp/classes.jar", Type.FILE ),
-    RESOURCESJAR( "desktop/tmp/resources.jar", Type.FILE ),
-    JAR( "desktop/${name}.jar", Type.FILE ),
-    UBERJAR( "desktop/dist/uber/${name}.jar", Type.FILE ),
-    APPJAR( "desktop/dist/app/${name}.jar", Type.FILE );
+    CLASSESJAR( "embedded/tmp/classes.jar", Type.FILE ),
+    RESOURCESJAR( "embedded/tmp/resources.jar", Type.FILE ),
+    JAR( "embedded/dist/${name}.jar", Type.FILE );
 
     private final Type type;
 
     private final String relativePath;
 
-    private DesktopTarget( String relativePath, Type type ) {
+    private EmbeddedTarget( String relativePath, Type type ) {
         this.type = type;
         this.relativePath = relativePath;
     }

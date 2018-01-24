@@ -54,7 +54,7 @@ public class CreateIPAMojo extends AbstractMojo {
         
         try {
             compiler.build();
-            compiler.install();
+            compiler.archive();
         }
         catch ( IOException ex ) {
             throw new MojoExecutionException( "Error", ex );

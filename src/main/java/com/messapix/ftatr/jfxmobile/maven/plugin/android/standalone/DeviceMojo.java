@@ -56,6 +56,25 @@ public class DeviceMojo extends AbstractAndroidMojo {
         // FIXME: Due to issue https://code.google.com/p/android/issues/detail?id=3254
         // adb always returns 0 even if errors occour. A temporary solution is to inspect output
         if ( output.contains( "Failure" ) ) {
+
+            if ( output.contains( "[INSTALL_FAILED_ALREADY_EXISTS]" ) ) {
+                getLog().info( "APP IS ALREADY INSTALLED ON THIS DEVICE. UNINSTALL..." );
+                String uninstallOutput = executor.exe(
+                        androidConf.getPlatformTool( "adb" ),
+                        "uninstall",
+                        androidConf.getApplicationPackage()
+                );
+
+                if ( !uninstallOutput.contains( "Failure" ) ) {
+                    this.execute();
+                }
+                else {
+                    getLog().error( uninstallOutput );
+                }
+
+                return;
+            }
+
             getLog().error( output );
 
             if ( output.contains( "rm failed for -f, No such file or directory" ) ) {

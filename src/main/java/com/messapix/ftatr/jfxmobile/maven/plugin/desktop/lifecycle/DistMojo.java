@@ -15,7 +15,6 @@
  */
 package com.messapix.ftatr.jfxmobile.maven.plugin.desktop.lifecycle;
 
-import com.messapix.ftatr.jfxmobile.maven.plugin.ArtifactResolver;
 import com.messapix.ftatr.jfxmobile.maven.plugin.FileSystem;
 import com.messapix.ftatr.jfxmobile.maven.plugin.JarMerger;
 import com.messapix.ftatr.jfxmobile.maven.plugin.MavenAnt;
@@ -52,9 +51,6 @@ public class DistMojo extends AbstractMojo {
     private DesktopConf desktopConf;
 
     @Component
-    private ArtifactResolver resolver;
-
-    @Component
     private JarMerger merger;
 
     @Override
@@ -66,22 +62,28 @@ public class DistMojo extends AbstractMojo {
         // Create app with dependencies
         ant.copy( fs.path( DesktopTarget.JAR ), fs.path( DesktopTarget.APPJAR ) );
 
+        final String libsFolder = fs.path( DesktopTarget.APPDIR ).relativize( fs.path( DesktopTarget.APPLIBSDIR ) ).toString();
         String classpath = "";
         for ( Artifact artifact : mobileConf.getProject().getArtifacts() ) {
             if ( "jar".equalsIgnoreCase( artifact.getType() ) ) {
-                ant.copy( artifact.getFile().toPath(), fs.path( DesktopTarget.APPLIBDIR ).resolve( artifact.getFile().getName() ) );
-                classpath += "lib/" + artifact.getFile().getName() + " ";
+                ant.copy( artifact.getFile().toPath(), fs.path( DesktopTarget.APPLIBSDIR ).resolve( artifact.getFile().getName() ) );
+                classpath += libsFolder + "/" + artifact.getFile().getName() + " ";
             }
         }
 
         for ( Artifact artifact : desktopConf.getUserArtifacts() ) {
             if ( "jar".equalsIgnoreCase( artifact.getType() ) ) {
-                ant.copy( artifact.getFile().toPath(), fs.path( DesktopTarget.APPLIBDIR ).resolve( artifact.getFile().getName() ) );
-                classpath += "lib/" + artifact.getFile().getName() + " ";
+                ant.copy( artifact.getFile().toPath(), fs.path( DesktopTarget.APPLIBSDIR ).resolve( artifact.getFile().getName() ) );
+                classpath += libsFolder + "/" + artifact.getFile().getName() + " ";
             }
         }
 
-        ant.addToManifest( fs.path( DesktopTarget.APPJAR ), "Class-Path", classpath );
+        classpath = classpath.trim();
+
+        if ( !classpath.isEmpty() ) {
+            ant.addToManifest( fs.path( DesktopTarget.APPJAR ), "Class-Path", classpath );
+        }
+
         ant.addToManifest( fs.path( DesktopTarget.APPJAR ), "Main-Class", mobileConf.getMainClass() );
     }
 

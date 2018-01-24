@@ -97,7 +97,7 @@ public class ProcessResourcesMojo extends AbstractMojo {
                 "-S", fs.string( AndroidTarget.RESDIR ),
                 "-A", fs.string( AndroidTarget.ASSETSDIR ),
                 "-F", fs.string( AndroidTarget.RESOURCESAPK ),
-                "--debug-mode",
+                androidConf.isDebugMode() ? "--debug-mode" : "",
                 "-0",
                 "apk"
         );

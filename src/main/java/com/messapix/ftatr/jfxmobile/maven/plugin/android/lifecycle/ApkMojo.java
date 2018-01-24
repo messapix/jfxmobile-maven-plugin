@@ -177,10 +177,10 @@ public class ApkMojo extends AbstractMojo {
 
         sb.append( "\n" );
 
-        sb.append( "Use packageOptions parameter to <exclude> or <pickFirst> such resources.\n" )
+        sb.append( "Use packagingOptions parameter to <exclude> or <pickFirst> such resources.\n" )
                 .append( "The following is a possible solution based on settings in pom.xml\n\n" )
                 .append( "<android>\n" )
-                .append( "<packageOptions>\n" )
+                .append( "<packagingOptions>\n" )
                 .append( "<excludes>\n" );
 
         for ( String exclude : excludes ) {
@@ -195,7 +195,7 @@ public class ApkMojo extends AbstractMojo {
             sb.append( "</pickFirsts>\n" );
         }
 
-        sb.append( "</excludes>\n" ).append( "</packageOptions>\n" ).append( "</android>\n" );
+        sb.append( "</excludes>\n" ).append( "</packagingOptions>\n" ).append( "</android>\n" );
 
         sb.append( "Re-run maven in debug mode to get more info about these duplicate resources." );
 

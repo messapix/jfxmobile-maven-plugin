@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Messapix.
+ * Copyright 2016 Messapix.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,54 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.messapix.ftatr.jfxmobile.maven.plugin.ios.lifecycle;
+package com.messapix.ftatr.jfxmobile.maven.plugin.embedded.lifecycle;
 
 import com.messapix.ftatr.jfxmobile.maven.plugin.FileSystem;
-import com.messapix.ftatr.jfxmobile.maven.plugin.MobileConf;
 import com.messapix.ftatr.jfxmobile.maven.plugin.Target;
-import com.messapix.ftatr.jfxmobile.maven.plugin.ios.AbstractIosMojo;
-import com.messapix.ftatr.jfxmobile.maven.plugin.ios.IosConf;
-import com.messapix.ftatr.jfxmobile.maven.plugin.ios.IosTarget;
-import com.messapix.ftatr.jfxmobile.maven.plugin.ios.RobovmBuilder;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.maven.artifact.Artifact;
+import com.messapix.ftatr.jfxmobile.maven.plugin.embedded.AbstractEmbeddedMojo;
+import com.messapix.ftatr.jfxmobile.maven.plugin.embedded.EmbeddedTarget;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  *
  * @author Alfio Gloria
  */
-public abstract class AbstractConfigureMojo extends AbstractIosMojo {
+@Mojo( name = "embedded-configure" )
+public class ConfigureMojo extends AbstractEmbeddedMojo {
     @Component
     private FileSystem fs;
-
-    @Component
-    private MobileConf mobileConf;
-
-    @Component
-    private IosConf iosConf;
-
-    @Component
-    private RobovmBuilder robovmConfigurator;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         super.init();
 
         // Create target dirs
-        for ( Target target : IosTarget.values() ) {
+        for ( Target target : EmbeddedTarget.values() ) {
             if ( target.getType() == Target.Type.DIR ) {
                 fs.file( target ).mkdirs();
             }
         }
-
-        List<Artifact> artifacts = new ArrayList<>();
-        artifacts.addAll( iosConf.getUserArtifacts() );
-        artifacts.addAll( iosConf.getBuildingArtifacts() );
-        artifacts.addAll( mobileConf.getProject().getArtifacts() );
-        robovmConfigurator.classpath( artifacts );
     }
 }

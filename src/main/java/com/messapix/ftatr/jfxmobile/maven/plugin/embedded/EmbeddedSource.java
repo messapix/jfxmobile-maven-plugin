@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Messapix.
+ * Copyright 2016 Messapix.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.messapix.ftatr.jfxmobile.maven.plugin.ios;
+package com.messapix.ftatr.jfxmobile.maven.plugin.embedded;
 
 import com.messapix.ftatr.jfxmobile.maven.plugin.Source;
 
@@ -21,18 +21,15 @@ import com.messapix.ftatr.jfxmobile.maven.plugin.Source;
  *
  * @author Alfio Gloria
  */
-public enum IosSource implements Source {
-    BASEDIR( "src/ios", Type.DIR ),
-    RESOURCESDIR( "src/ios/resources", Type.DIR ),
-    ASSETSDIR( "src/ios/assets", Type.DIR ),
-    SOURCEDIR( "src/ios/java", Type.DIR ),
-    NATIVEDIR( "src/ios/jniLibs", Type.DIR );
+public enum EmbeddedSource implements Source {
+    SOURCEDIR( "src/embedded/java", Type.DIR ),
+    RESOURCESDIR( "src/embedded/resources", Type.DIR );
 
     private final String defaultRelativePath;
 
     private final Type type;
 
-    private IosSource( String defaultRelativePath, Type type ) {
+    private EmbeddedSource( String defaultRelativePath, Type type ) {
         this.defaultRelativePath = defaultRelativePath;
         this.type = type;
     }

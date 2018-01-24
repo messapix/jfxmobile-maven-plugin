@@ -117,7 +117,7 @@ iOS parameters are wrapped in ```<ios>``` element.
 | deviceId | (String) The identifier of the target device | jfxmobile.ios.deviceId |  |
 | simulator | (Simulator) This element contains simulator settings. See table below |  |  |
 
-### iOS Simulator
+#### iOS Simulator
 The following parameters are used mostly as properties passed to maven at runtime. Anyway they can be set in pom.xml as well.
 
 | parameter | description | property | default |
@@ -125,3 +125,27 @@ The following parameters are used mostly as properties passed to maven at runtim
 | deviceName | (String) The name of the device to use in the iOS simulator. For instance iPhone4 or iPhone-5s | jfxmobile.ios.simulator.deviceName |  |
 | arch | (String) The architecture of the target simulator. Allowed values ar x86 or x86_64 | jfxmobile.ios.simulator.arch | The architecture of the local machine |
 | sdk | (String) The iOS sdk version to use in the iOS simulator | jfxmobile.ios.simulator.sdk | The highest version of installed sdks |
+
+### Embedded
+Embedded parameters are wrapped in ```<embedded>``` element.
+
+| parameter | description | property | default |
+| --------- | ----------- | ------------ | ------- |
+| resourceFiltering | (Boolean) If true maven will resolve properties in every file from src/embedded/resources folder | jfxmobile.embedded.resourceFiltering |  |
+| dependencies | (List) Allow user to define embedded specific dependencies |  |  |
+| remotePlatforms | (List) List of remote platforms |  |  |
+| deviceId | (String) The remote platform id that will be used. It is mostly used as property passed at runtime | jfxmobile.embedded.deviceId |  |
+
+#### Embedded platforms
+| parameter | description | property | default |
+| --------- | ----------- | ------------ | ------- |
+| id | (String) The identifier of remote platform. It is used to instruct maven about the device to run |  |  |
+| host | (String) The ip address of the embedded device. It must be reachable from your development environment. |  |  |
+| port | (int) The port that is being used by the ssh server on the embedded device. |  |  |
+| username | (String) The username to use when connecting to the embedded device. |  |  |
+| password | (String) The password of the user that is used when connecting to the embedded device. |  |  |
+| keyfile | (File) A keyfile that is being used for connecting to the embedde device. This property will be ignored when a password has been provided. |  |  |
+| passphrase | (String) The passphrase for the configured keyfile. This property will be ignored when a password has been provided. |  |  |
+| workingDir | (String) The directory on the remote platform that will contain the project folder |  |  |
+| jreLocation | (String) The installation location of JDK 8 for the embedded device. |  |  |
+| execPrefix | (String) This string will be prepended to the java command, e.g. sudo |  |  |

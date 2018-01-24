@@ -87,7 +87,15 @@ iOS parameters are wrapped in ```<ios>``` element.
 
 <@table iosTable></@table>
 
-### iOS Simulator
+#### iOS Simulator
 The following parameters are used mostly as properties passed to maven at runtime. Anyway they can be set in pom.xml as well.
 
 <@table iosSimTable></@table>
+
+### Embedded
+Embedded parameters are wrapped in ```<embedded>``` element.
+
+<@table embeddedTable></@table>
+
+#### Embedded platforms
+<@table embeddedPlatformTable></@table>

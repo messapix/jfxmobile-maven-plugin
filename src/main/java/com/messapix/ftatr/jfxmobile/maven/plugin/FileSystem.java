@@ -98,7 +98,7 @@ public class FileSystem {
      * Return the target's path as a string
      *
      * @param target Target enum
-     * @return string 
+     * @return string
      */
     public String string( Target target ) {
         return path( target ).toString();
@@ -139,6 +139,10 @@ public class FileSystem {
 
     public boolean exists( Source source ) {
         return file( source ).exists();
+    }
+
+    public String fileName( Target target ) {
+        return path( target ).getFileName().toString();
     }
 
     public String fileNameWithoutExt( Target target ) {

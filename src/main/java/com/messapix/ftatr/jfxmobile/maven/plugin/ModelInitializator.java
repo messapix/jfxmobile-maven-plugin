@@ -20,6 +20,8 @@ import com.messapix.ftatr.jfxmobile.maven.plugin.annotations.Default;
 import com.messapix.ftatr.jfxmobile.maven.plugin.annotations.Inspect;
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -115,13 +117,34 @@ public class ModelInitializator {
                 }
 
                 try {
-                    Object value = field.get( object );
-                    if ( value == null ) {
-                        value = field.getType().newInstance();
-                        field.set( object, value );
-                    }
+                    if ( List.class.equals( field.getType() ) ) {
+                        List list = (List)field.get( object );
 
-                    process( value, newPrefix );
+                        if ( list == null ) {
+                            list = new ArrayList();
+                            field.set( object, list );
+                        }
+
+                        for ( Object item : list ) {
+                            try {
+                                Method idMethod = item.getClass().getMethod( "getId" );
+                                String id = (String)idMethod.invoke( item );
+                                process( item, newPrefix + "." + id );
+                            }
+                            catch ( NoSuchMethodException | SecurityException | InvocationTargetException ex ) {
+                                // DO NOTHING
+                            }
+                        }
+                    }
+                    else {
+                        Object value = field.get( object );
+                        if ( value == null ) {
+                            value = field.getType().newInstance();
+                            field.set( object, value );
+                        }
+
+                        process( value, newPrefix );
+                    }
                 }
                 catch ( IllegalArgumentException | IllegalAccessException | InstantiationException ex ) {
                     // DO NOTHING

@@ -30,6 +30,7 @@ import org.robovm.compiler.config.Arch;
 import org.robovm.compiler.config.Config;
 import org.robovm.compiler.config.OS;
 import org.robovm.compiler.config.Resource;
+import org.robovm.compiler.target.ios.IOSTarget;
 import org.robovm.compiler.target.ios.ProvisioningProfile;
 import org.robovm.compiler.target.ios.SigningIdentity;
 
@@ -90,6 +91,8 @@ public class RobovmBuilder {
                 "libprism_es2.a"
         );
 
+        addUserLibs();
+
         builder.addForceLinkClass( "javafx.**.*" )
                 .addForceLinkClass( "com.sun.**.*" )
                 .addForceLinkClass( "com.android.**.*" )
@@ -112,7 +115,7 @@ public class RobovmBuilder {
             builder.addResource( new Resource( fs.file( IosSource.ASSETSDIR ) ) );
         }
 
-        builder.targetType( "ios" );
+        builder.targetType( IOSTarget.TYPE );
 
         return this;
     }
@@ -322,9 +325,25 @@ public class RobovmBuilder {
         }
     }
 
+    /**
+     * Add native libs from the SDK
+     * 
+     * @param names List of lib names to be added
+     */
     private void addLibs( String... names ) {
         for ( String name : names ) {
             builder.addLib( new Config.Lib( iosConf.getSdkLibDir().resolve( name ).toAbsolutePath().toString(), true ) );
+        }
+    }
+
+    /**
+     * Add native libs from jniLibs folder
+     */
+    private void addUserLibs() {
+        if ( fs.exists( IosSource.NATIVEDIR ) ) {
+            for ( String lib : fs.file( IosSource.NATIVEDIR ).list() ) {
+                builder.addLib( new Config.Lib( lib, true ) );
+            }
         }
     }
 

@@ -137,9 +137,9 @@ public class IosData {
             + "If used in property archs must be separated by a colon. For example jfxmobile.ios.ipaArchs=thumbv7:arm64"
     )
     private List<String> ipaArchs;
-    
+
     @AsProperty
-    @Descriptor(desc = "The identifier of the target device")
+    @Descriptor( desc = "The identifier of the target device" )
     private String deviceId;
 
     @Inspect

@@ -117,8 +117,8 @@ public class IosConf {
                 configureSimulatorDevice( iosData.getSimulator().getDeviceName() );
                 break;
             case DEVICE:
-                configureDeviceArch( iosData.getSimulator().getArch() );
-                configureTargetSDK( iosData.getSimulator().getSdk(), false );
+                configureDeviceArch( null );
+                configureTargetSDK( null, false );
                 break;
         }
 
@@ -356,7 +356,7 @@ public class IosConf {
     public DeviceType.DeviceFamily getDeviceFamily() {
         return deviceFamily;
     }
-    
+
     public String getDeviceId() {
         return iosData.getDeviceId();
     }

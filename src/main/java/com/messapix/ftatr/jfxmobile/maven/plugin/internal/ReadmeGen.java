@@ -21,6 +21,8 @@ import com.messapix.ftatr.jfxmobile.maven.plugin.android.model.AndroidData;
 import com.messapix.ftatr.jfxmobile.maven.plugin.annotations.AsProperty;
 import com.messapix.ftatr.jfxmobile.maven.plugin.annotations.Descriptor;
 import com.messapix.ftatr.jfxmobile.maven.plugin.desktop.model.DesktopData;
+import com.messapix.ftatr.jfxmobile.maven.plugin.embedded.model.EmbeddedData;
+import com.messapix.ftatr.jfxmobile.maven.plugin.embedded.model.RemotePlatform;
 import com.messapix.ftatr.jfxmobile.maven.plugin.ios.model.IosData;
 import com.messapix.ftatr.jfxmobile.maven.plugin.ios.model.Simulator;
 import java.lang.reflect.Field;
@@ -46,7 +48,8 @@ public class ReadmeGen {
         root.put( "desktopTable", processDescriptorsInClass( DesktopData.class, "jfxmobile.desktop" ) );
         root.put( "iosTable", processDescriptorsInClass( IosData.class, "jfxmobile.ios" ) );
         root.put( "iosSimTable", processDescriptorsInClass( Simulator.class, "jfxmobile.ios.simulator" ) );
-
+        root.put( "embeddedTable", processDescriptorsInClass( EmbeddedData.class, "jfxmobile.embedded" ) );
+        root.put( "embeddedPlatformTable", processDescriptorsInClass( RemotePlatform.class, "jfxmobile.embedded.remotePlatforms" ) );
         TemplateUtils.process( "README.tpl", Paths.get( "README.md" ).toAbsolutePath(), root );
     }
 
