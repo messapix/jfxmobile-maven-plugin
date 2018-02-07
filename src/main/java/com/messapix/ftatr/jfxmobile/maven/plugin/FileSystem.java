@@ -138,7 +138,11 @@ public class FileSystem {
     }
 
     public boolean exists( Source source ) {
-        return file( source ).exists();
+        File file = file( source );
+
+        return file.exists()
+                && ( source.getType() != Source.Type.DIR || file.isDirectory() )
+                && ( source.getType() != Source.Type.FILE || file.isFile() );
     }
 
     public String fileName( Target target ) {

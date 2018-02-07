@@ -57,12 +57,6 @@ public class CompileMojo extends AbstractCompilerMojo {
 
     @Override
     public void execute() throws MojoExecutionException, CompilationFailureException {
-//        if ( compilerArgs == null ) {
-//            compilerArgs = new ArrayList<>();
-//        }
-//
-//        compilerArgs.add( "-bootclasspath=/home/alfio/.m2/repository/org/javafxports/jfxdvk/8.60.6/jfxdvk-8.60.6.jar" );
-
         super.execute();
     }
 
@@ -118,7 +112,6 @@ public class CompileMojo extends AbstractCompilerMojo {
             compilerArguments = new HashMap<>();
         }
 
-        compilerArguments.put( "bootclasspath", "/usr/local/java/android/24.1.2/platforms/android-21/android.jar" );
         return compilerArguments;
     }
 

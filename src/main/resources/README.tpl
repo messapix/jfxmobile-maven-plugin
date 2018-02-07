@@ -17,6 +17,8 @@ Waiting for a better documentation take a look at the [JavafxPorts](http://docs.
 The following is an example of configuration:
 
 ```
+<packaging>mobile</packaging>
+
 ...
 <plugin>
   <groupId>com.messapix.ftatr.jfxmobile</groupId>

@@ -15,7 +15,6 @@
  */
 package com.messapix.ftatr.jfxmobile.maven.plugin.ios.lifecycle;
 
-import com.messapix.ftatr.jfxmobile.maven.plugin.ArtifactResolver;
 import com.messapix.ftatr.jfxmobile.maven.plugin.FileSystem;
 import com.messapix.ftatr.jfxmobile.maven.plugin.MobileConf;
 import com.messapix.ftatr.jfxmobile.maven.plugin.TemplateUtils;

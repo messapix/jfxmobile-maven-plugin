@@ -88,7 +88,7 @@ public class MavenAnt {
     }
 
     public void uncompress( File file, Path dest ) {
-        if ( file.getName().endsWith( ".zip" ) || file.getName().endsWith( ".jar" ) ) {
+        if ( file.getName().endsWith( ".zip" ) || file.getName().endsWith( ".jar" ) || file.getName().endsWith( ".aar" ) ) {
             Unzip unzip = new Unzip();
             unzip.setProject( getAntProject() );
             unzip.setSrc( file );

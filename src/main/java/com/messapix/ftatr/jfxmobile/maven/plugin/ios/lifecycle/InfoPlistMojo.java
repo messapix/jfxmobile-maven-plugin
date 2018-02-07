@@ -60,6 +60,9 @@ public class InfoPlistMojo extends AbstractMojo {
             log.debug( "Create default info.plist" );
             createPlist( false, IosTarget.DEFINFOPLIST );
         }
+        
+        log.debug( "Create Entitlements.plist" );
+        createEntitlementsPlist( IosTarget.ENTITLEMENTSPLIST );
     }
 
     private List<Integer> getFamilies( boolean isSimulator ) throws MojoExecutionException {
@@ -100,5 +103,10 @@ public class InfoPlistMojo extends AbstractMojo {
         root.put( "families", getFamilies( isSimulator ) );
 
         templateUtils.process( "infoPList.tpl", target, root );
+    }
+    
+    private void createEntitlementsPlist( Target target ) throws MojoExecutionException {
+        Map<String, Object> root = new HashMap<>();
+        root.put( "apsEnvironment", iosConf.getApsEnvironment() );
     }
 }

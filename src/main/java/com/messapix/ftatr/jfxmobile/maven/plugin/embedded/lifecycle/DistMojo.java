@@ -18,7 +18,6 @@ package com.messapix.ftatr.jfxmobile.maven.plugin.embedded.lifecycle;
 import com.messapix.ftatr.jfxmobile.maven.plugin.FileSystem;
 import com.messapix.ftatr.jfxmobile.maven.plugin.MavenAnt;
 import com.messapix.ftatr.jfxmobile.maven.plugin.MobileConf;
-import com.messapix.ftatr.jfxmobile.maven.plugin.desktop.DesktopTarget;
 import com.messapix.ftatr.jfxmobile.maven.plugin.embedded.EmbeddedConf;
 import com.messapix.ftatr.jfxmobile.maven.plugin.embedded.EmbeddedTarget;
 import java.nio.file.Path;

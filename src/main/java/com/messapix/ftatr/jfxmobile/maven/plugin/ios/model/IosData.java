@@ -139,8 +139,18 @@ public class IosData {
     private List<String> ipaArchs;
 
     @AsProperty
+    @Descriptor( desc = "iOS aps environment. It can be 'development' or 'production'" )
+    @Default( "production" )
+    private String apsEnvironment;
+
+    @AsProperty
     @Descriptor( desc = "The identifier of the target device" )
     private String deviceId;
+    
+    @Descriptor(
+            desc="List of additional iOS frameworks"
+    )
+    private List<String> frameworks;
 
     @Inspect
     @Descriptor(
@@ -218,5 +228,13 @@ public class IosData {
 
     public String getDeviceId() {
         return deviceId;
+    }
+
+    public String getApsEnvironment() {
+        return apsEnvironment;
+    }
+
+    public List<String> getFrameworks() {
+        return frameworks;
     }
 }

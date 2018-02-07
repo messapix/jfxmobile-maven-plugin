@@ -4,6 +4,7 @@ import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.application.Preloader;
 import org.robovm.apple.foundation.NSAutoreleasePool;
+import org.robovm.apple.foundation.NSDictionary;
 import org.robovm.apple.uikit.*;
 import java.io.*;
 import java.lang.reflect.Method;
@@ -39,6 +40,40 @@ public class ${launcherName} extends UIApplicationDelegateAdapter {
         Thread launchThread = new Thread() {
             @Override
             public void run() {
+                if (launchOptions != null && launchOptions.getDictionary() != null) {
+                    try {
+                        Map<String, Object> map = launchOptions.getDictionary().asStringMap();
+                        for (Map.Entry<String, Object> entry : map.entrySet()) {
+                            
+                            // TODO: Define all the (12+) different possible keys
+                            switch (entry.getKey()) {
+                                case "UIApplicationLaunchOptionsURLKey":
+                                    System.setProperty("Launch.URL", entry.getValue().toString());
+                                    break;
+                                case "UIApplicationLaunchOptionsLocalNotificationKey": 
+                                    if (launchOptions.getLocalNotification() != null) {
+                                        final NSDictionary userInfo = launchOptions.getLocalNotification().getUserInfo();
+                                        if (userInfo.containsKey("userId")) {
+                                            System.setProperty("Launch.LocalNotification", userInfo.getString("userId"));
+                                        }
+                                    }
+                                    break;
+                                case "UIApplicationLaunchOptionsRemoteNotificationKey":
+                                    if (launchOptions.getRemoteNotification() != null) {
+                                        final NSDictionary dictionary = launchOptions.getRemoteNotification().getDictionary();
+                                        // TODO: Define expected json key-values
+                                        System.setProperty("Launch.PushNotification", dictionary.toString());
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Exception in didFinishLaunching: " + e);
+                    }
+                }
+
                 if (Application.class.isAssignableFrom(mainClass)) {
                     LauncherImpl.launchApplication(mainClass, preloaderClass, new String[]{});
                 } else {

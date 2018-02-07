@@ -101,6 +101,8 @@ public class IosConf {
 
         this.filtering = iosData.getResourceFiltering();
 
+        checkApsEnvironment( iosData.getApsEnvironment() );
+
         configureSdk( iosData.getIosSdk() );
         configureRobovm( iosData.getRobovmSdk() );
 
@@ -384,12 +386,26 @@ public class IosConf {
         return defInfoPList;
     }
 
+    public String getApsEnvironment() {
+        return iosData.getApsEnvironment();
+    }
+
     private void configureOS( IosData iosData ) throws MojoExecutionException {
         try {
             this.os = OS.valueOf( iosData.getOs() );
         }
         catch ( IllegalArgumentException ex ) {
             throw new MojoExecutionException( "OS=" + iosData.getOs() + " is invalid. Valid values are " + Arrays.toString( OS.values() ) );
+        }
+    }
+
+    public List<String> getAdditionalFrameworks() {
+        return iosData.getFrameworks() != null ? iosData.getFrameworks() : new ArrayList<String>();
+    }
+
+    private void checkApsEnvironment( String apsEnvironment ) throws MojoExecutionException {
+        if ( apsEnvironment != null && !"development".equals( apsEnvironment ) && !"production".equals( apsEnvironment ) ) {
+            throw new MojoExecutionException( "apsEnvironment=" + apsEnvironment + " is invalid. It must be either 'development' or 'production'" );
         }
     }
 

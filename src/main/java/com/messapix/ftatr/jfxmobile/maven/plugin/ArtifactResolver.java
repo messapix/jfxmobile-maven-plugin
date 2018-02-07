@@ -63,7 +63,7 @@ public class ArtifactResolver {
         File file = artifact.getFile();
         File unpackedDir = new File( file.getParent(), UNPACKED_FOLDER );
 
-        if ( dependency.getType() != null && ( dependency.getType().equals( "zip" ) || dependency.getType().equals( "tar.gz" ) ) ) {
+        if ( dependency.getType() != null && ( dependency.getType().equals( "zip" ) || dependency.getType().equals( "tar.gz" ) || dependency.getType().equals( "aar" ) ) ) {
             if ( unpackedDir.exists() && artifact.isSnapshot() ) {
                 unpackedDir.delete();
             }
@@ -117,6 +117,7 @@ public class ArtifactResolver {
         logger.debug( "Trying to resolve artifact " + artifact );
         try {
             List<ArtifactRepository> remoteArtifactRepositories = evaluator.evaluate( "${project.remoteArtifactRepositories}", List.class );
+
             ArtifactRepository localRepository = evaluator.evaluate( "${localRepository}", ArtifactRepository.class );
             resolver.resolve( artifact, remoteArtifactRepositories, localRepository );
         }
@@ -184,6 +185,10 @@ public class ArtifactResolver {
     private Path buildPath( Artifact artifact ) throws MojoExecutionException {
         Path unpackedFolder = artifact.getFile().toPath().resolveSibling( UNPACKED_FOLDER );
 
+        if ( "aar".equals( artifact.getType() ) ) {
+            return unpackedFolder;
+        }
+
         String[] dirs = unpackedFolder.toFile().list();
 
         if ( dirs.length != 1 ) {
@@ -192,5 +197,4 @@ public class ArtifactResolver {
 
         return unpackedFolder.resolve( dirs[0] );
     }
-
 }

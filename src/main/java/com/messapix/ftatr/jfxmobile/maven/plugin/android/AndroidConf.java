@@ -32,9 +32,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.UnknownRepositoryLayoutException;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
+import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.Logger;
@@ -104,7 +109,13 @@ public class AndroidConf {
     private ModelInitializator modelInitializator;
 
     @Requirement
+    private ArtifactRepositoryFactory artifactRepositoryFactory;
+
+    @Requirement
     private FileSystem fs;
+
+    @Requirement
+    private MavenProject project;
 
     public void configure( AndroidData androidData ) throws MojoExecutionException, MojoFailureException {
         log.debug( "Configuring build for Android" );
@@ -128,6 +139,7 @@ public class AndroidConf {
         configureDalvikHome( androidData.getDalvikSdk() );
         configureApplicationPackage( androidData.getApplicationPackage() );
         configureSigning( androidData.getSigningConfig() );
+        configureRepos();
         configureDependencies( androidData.getDependencies() );
 
         configured = true;
@@ -406,6 +418,69 @@ public class AndroidConf {
         debugMode = signingConfig.isDebugKeystore();
     }
 
+    private void configureRepos() throws MojoExecutionException {
+        try {
+            ArtifactRepositoryPolicy policy = new ArtifactRepositoryPolicy(
+                    true,
+                    ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS,
+                    ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN
+            );
+
+            {
+                File androidSupportRepositoryDir = androidSdkDir.resolve( "extras/android/m2repository" ).toFile();
+
+                if ( !androidSupportRepositoryDir.exists() || !androidSupportRepositoryDir.isDirectory() ) {
+                    throw new MojoExecutionException( "Android Support Repository is not installed in your SDK. Please install it from Android SDK Manager" );
+                }
+
+                ArtifactRepository ar = artifactRepositoryFactory.createArtifactRepository(
+                        "jfxmobile-android-repo",
+                        "file://" + androidSupportRepositoryDir,
+                        "default",
+                        null,
+                        policy
+                );
+
+                project.getRemoteArtifactRepositories().add( ar );
+            }
+
+            {
+                File dir = androidSdkDir.resolve( "extras/m2repository" ).toFile();
+
+                if ( dir.exists() && dir.isDirectory() ) {
+                    ArtifactRepository ar = artifactRepositoryFactory.createArtifactRepository(
+                            "jfxmobile-sdk-repo",
+                            "file://" + dir,
+                            "default",
+                            null,
+                            policy
+                    );
+
+                    project.getRemoteArtifactRepositories().add( ar );
+                }
+            }
+            
+            {
+                File dir = androidSdkDir.resolve( "extras/google/m2repository" ).toFile();
+
+                if ( dir.exists() && dir.isDirectory() ) {
+                    ArtifactRepository ar = artifactRepositoryFactory.createArtifactRepository(
+                            "jfxmobile-google-repo",
+                            "file://" + dir,
+                            "default",
+                            null,
+                            policy
+                    );
+
+                    project.getRemoteArtifactRepositories().add( ar );
+                }
+            }
+        }
+        catch ( UnknownRepositoryLayoutException ex ) {
+            // NOTHING
+        }
+    }
+
     private static String nameWithExtension( String name ) {
         return System.getProperty( "os.name" ).startsWith( "Windows" ) ? name + ".exe" : name;
     }
@@ -418,8 +493,17 @@ public class AndroidConf {
             }
         }
 
+        Path unpackDir = artifactResolver.unpack( deps.multidex() );
+        Dependency multidexJar = new Dependency();
+        multidexJar.setGroupId( "com.messapix.ftatr.jfxmobile.system" );
+        multidexJar.setArtifactId( "multidex" );
+        multidexJar.setVersion( mobileConf.getJavafxportsVersion() );
+        multidexJar.setScope( Artifact.SCOPE_SYSTEM );
+        multidexJar.setType( "jar" );
+        multidexJar.setSystemPath( unpackDir.resolve( "classes.jar" ).toAbsolutePath().toString() );
+
         // Add Android building dependencies
-        buildingArtifacts.add( artifactResolver.resolve( deps.multidex() ) );
+        buildingArtifacts.add( artifactResolver.resolve( multidexJar ) );
         buildingArtifacts.add( artifactResolver.resolve( deps.jfxrt() ) );
         buildingArtifacts.add( artifactResolver.resolve( deps.compat() ) );
         buildingArtifacts.add( artifactResolver.resolve( deps.android() ) );

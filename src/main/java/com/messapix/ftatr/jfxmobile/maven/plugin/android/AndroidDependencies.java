@@ -58,10 +58,9 @@ public class AndroidDependencies {
     }
 
     public Dependency multidex() {
-        return utils.system(
-                "android-multidex",
-                androidConf.getAndroidSdkDir().resolve( "extras/android/support/multidex/library/libs/android-support-multidex.jar" )
-        );
+        Dependency dep = utils.compile( "com.android.support", "multidex", "1.0.1" );
+        dep.setType( "aar" );
+        return dep;
     }
 
     public Dependency proguard() {

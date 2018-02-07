@@ -31,7 +31,8 @@ public enum IosTarget implements Target {
     GENERATEDSOURCEDIR( "ios/tmp/gensources", Type.DIR ),
     CLASSESDIR( "ios/tmp/classes", Type.DIR ),
     DEFLAUNCHER( GENERATEDSOURCEDIR.resolve( "org/javafxports/jfxmobile/ios/BasicLauncher.java" ), Type.FILE ),
-    DEFINFOPLIST( "ios/tmp/Default-Info.plist", Type.FILE );
+    DEFINFOPLIST( "ios/tmp/Default-Info.plist", Type.FILE ),
+    ENTITLEMENTSPLIST("ios/tmp/Entitlements.plist",Type.FILE);
 
     private final Type type;
 

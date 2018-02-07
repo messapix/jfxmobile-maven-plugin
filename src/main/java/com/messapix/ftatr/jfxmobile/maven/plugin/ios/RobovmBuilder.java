@@ -107,9 +107,18 @@ public class RobovmBuilder {
                 .addFramework( "CoreText" )
                 .addFramework( "ImageIO" )
                 .addFramework( "MobileCoreServices" )
+                .addFramework( "CoreBluetooth" )
+                .addFramework( "CoreLocation" )
                 .addFramework( "CoreMedia" )
+                .addFramework( "CoreMotion" )
                 .addFramework( "AVFoundation" )
-                .addFramework( "MediaPlayer" );
+                .addFramework( "AudioToolbox" )
+                .addFramework( "MediaPlayer" )
+                .addFramework( "UserNotifications" )
+                .addFramework( "AVKit" )
+                .addFramework( "StoreKit" );
+
+        addUserFrameworks();
 
         if ( fs.exists( IosSource.ASSETSDIR ) ) {
             builder.addResource( new Resource( fs.file( IosSource.ASSETSDIR ) ) );
@@ -136,6 +145,9 @@ public class RobovmBuilder {
         builder.skipInstall( true );
         builder.os( OS.ios );
         builder.arch( arch );
+
+        // TODO: verificare le condizioni per cui è possibile aggiungere l'Entitlements.plist
+        builder.iosEntitlementsPList( fs.file( IosTarget.ENTITLEMENTSPLIST ) );
     }
 
     public RobovmBuilder files( File configFile, File propertiesFile ) throws MojoExecutionException {
@@ -261,16 +273,16 @@ public class RobovmBuilder {
                 log.debug( "Using explicit iOS Signing identity: " + signingIdentity );
                 builder.iosSignIdentity( SigningIdentity.find( SigningIdentity.list(), signingIdentity ) );
             }
-            else{
-                log.info( "No signing indentity provided");
+            else {
+                log.info( "No signing indentity provided" );
             }
 
             if ( provisioningProfile != null ) {
                 log.debug( "Using explicit iOS provisioning profile: " + provisioningProfile );
                 builder.iosProvisioningProfile( ProvisioningProfile.find( ProvisioningProfile.list(), provisioningProfile ) );
             }
-            else{
-                log.info( "No provisioning profile provided");
+            else {
+                log.info( "No provisioning profile provided" );
             }
         }
 
@@ -327,7 +339,7 @@ public class RobovmBuilder {
 
     /**
      * Add native libs from the SDK
-     * 
+     *
      * @param names List of lib names to be added
      */
     private void addLibs( String... names ) {
@@ -343,6 +355,22 @@ public class RobovmBuilder {
         if ( fs.exists( IosSource.NATIVEDIR ) ) {
             for ( String lib : fs.file( IosSource.NATIVEDIR ).list() ) {
                 builder.addLib( new Config.Lib( lib, true ) );
+                log.info( "Native lib " + lib + " added" );
+            }
+        }
+    }
+
+    private void addUserFrameworks() {
+        for ( String framework : iosConf.getAdditionalFrameworks() ) {
+            builder.addFramework( framework );
+        }
+
+        if ( fs.exists( IosSource.FRAMEWORKSDIR ) ) {
+            builder.addFrameworkPath( fs.file( IosSource.FRAMEWORKSDIR ) );
+            for ( String frameworkFileName : fs.file( IosSource.FRAMEWORKSDIR ).list() ) {
+                if ( frameworkFileName.endsWith( ".framework" ) ) {
+                    builder.addFramework( frameworkFileName.substring( 0, frameworkFileName.lastIndexOf( "." ) ) );
+                }
             }
         }
     }
@@ -391,4 +419,5 @@ public class RobovmBuilder {
             }
         };
     }
+
 }

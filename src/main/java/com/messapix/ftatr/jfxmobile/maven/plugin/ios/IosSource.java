@@ -26,7 +26,8 @@ public enum IosSource implements Source {
     RESOURCESDIR( "src/ios/resources", Type.DIR ),
     ASSETSDIR( "src/ios/assets", Type.DIR ),
     SOURCEDIR( "src/ios/java", Type.DIR ),
-    NATIVEDIR( "src/ios/jniLibs", Type.DIR );
+    NATIVEDIR( "src/ios/jniLibs", Type.DIR ),
+    FRAMEWORKSDIR( "src/ios/frameworks", Type.DIR );
 
     private final String defaultRelativePath;
 
